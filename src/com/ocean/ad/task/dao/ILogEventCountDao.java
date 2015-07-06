@@ -12,7 +12,7 @@ public interface ILogEventCountDao {
 	@Select("select max(min_date) from ${tableName} where event = #{event};")
 	public String selectMaxTimeByEvent(@Param("tableName")String tableName,@Param("event")String event);
 	
-	@Insert("insert into ${tableName} (event,count,uv_count,min_date,create_time) values ("
+	@Insert("insert into ${tableName} (event,count,uv,min_date,create_time) values ("
 			+ "#{event},#{count},#{uvCount},#{minDate},#{createTime});")
 	public void insert(LogEventCount lec);
 	

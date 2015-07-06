@@ -47,7 +47,7 @@
 <!-- ======================== 调度触发器 ======================== -->  
 <bean id="LogTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean" >  
     <property name="jobDetail" ref="LogQtzJobMethod"></property>  
-    <property name="cronExpression" value=" */5 * * * * ?"></property>  
+    <property name="cronExpression" value=" 0 */1 * * * ?"></property>  
 </bean>  
   
 <!-- ======================== 调度工厂 ======================== -->  

@@ -1,13 +1,12 @@
 package com.ocean.ad.task.service;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 
 import javax.annotation.Resource;
 
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.ocean.ad.task.dao.ILogEventCountDao;
 import com.ocean.ad.task.dao.ILogEventDao;
@@ -23,9 +22,9 @@ public class LogService implements ILogService{
 	private ILogEventDao logEventDao;	
 	@Resource
 	private ILogService logService;
-	private String startTime="2015-06-25 00:00";
+	private String startTime="2015-07-01 00:00";
 	private String [] events =new String[]{"reqad_s","reqad_f","show_s","init_s","init_f","dau"};
-	private int before=0;
+	private int before=1;
 	private String log_event_table="log_event_";
 	private String log_event_count_table="log_event_count_";
 	private String job="log_count";
@@ -49,19 +48,19 @@ public class LogService implements ILogService{
 						
 					}
 				}
-				Date maxDate = DateUtil.parseMinFmt(startMin);
+				Date startDate = DateUtil.parseMinFmt(startMin);
 				Calendar ca = Calendar.getInstance();
-				ca.setTime(maxDate);
-				
-				for(int i=0;i<getDateRangeMin(maxDate.getTime(),now.getTime())-before;i++){
+				ca.setTime(startDate);
+				for(int i=0;i<getDateRangeMin(startDate.getTime(),now.getTime())-before;i++){
 					ca.add(Calendar.MINUTE,1);
 					String minDate = DateUtil.DateMinFmt(ca.getTime());
 					String date = DateUtil.DateYYMMDDFmt(ca.getTime());
 					int count = logEventDao.selectCountOnMin(log_event_table+date, event,minDate);
-					int uvCount = logEventDao.selectCountOnMin(log_event_table+date, event,minDate);
+					int uvCount = logEventDao.selectCountUvOnMin(log_event_table+date, event,minDate);
 					LogEventCount lec = new LogEventCount(event, count, uvCount, minDate,now,log_event_count_table+DateUtil.DateYYYYFmt(ca.getTime()));
 					content = lec;
 					logEventCountDao.insert(lec);
+					content=null;
 					
 				}
 				
@@ -75,6 +74,7 @@ public class LogService implements ILogService{
 				content=null;
 			} catch (Exception e2) {
 				// TODO: handle exception
+				e2.printStackTrace();
 			}
 			
 		}

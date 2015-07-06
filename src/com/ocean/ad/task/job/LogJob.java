@@ -1,16 +1,10 @@
 package com.ocean.ad.task.job;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import javax.annotation.Resource;
 
 import com.ocean.ad.task.dao.ILogEventCountDao;
 import com.ocean.ad.task.dao.ILogEventDao;
-import com.ocean.ad.task.model.LogEventCount;
 import com.ocean.ad.task.service.ILogService;
-import com.ocean.util.DateUtil;
-import com.ocean.util.JsonUtils;
 
 public class LogJob {
 	@Resource
@@ -30,6 +24,7 @@ public class LogJob {
 	protected void execute( ) {
 		// TODO Auto-generated method stub
 		if(threadCount>0){
+			System.out.println("已经有人在执行了：threadCount="+threadCount);
 			return;
 		}
 		synchronized (this) {			
@@ -38,13 +33,14 @@ public class LogJob {
 		logService.logJob();
 		synchronized (this) {			
 				threadCount--;
+				System.out.println("我执行完了：threadCount="+threadCount);
 		}
 		
 		
 	}
 	
-	private int getDateRangeMin(long start,long end){
-		return new Long((end- start)/(60*1000)).intValue();
-	}
+//	private int getDateRangeMin(long start,long end){
+//		return new Long((end- start)/(60*1000)).intValue();
+//	}
 
 }
