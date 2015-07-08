@@ -13,7 +13,6 @@ public class LogJob {
 	private ILogEventDao logEventDao;
 	@Resource
 	private ILogService logService;
-	private String startTime="2015-06-25 00:00";
 	private String [] events =new String[]{"reqad_s","reqad_f","show_s","init_s","init_f","dau"};
 	private int before=0;
 	private String log_event_table="log_event_";

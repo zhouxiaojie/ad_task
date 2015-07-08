@@ -22,8 +22,8 @@ public class LogService implements ILogService{
 	private ILogEventDao logEventDao;	
 	@Resource
 	private ILogService logService;
-	private String startTime="2015-07-01 00:00";
-	private String [] events =new String[]{"reqad_s","reqad_f","show_s","init_s","init_f","dau"};
+	private String startTime="2015-07-07 00:00";
+	private String [] events =new String[]{"reqad_s","reqad_f","show_s","show_f","init_s","init_f"};
 	private int before=1;
 	private String log_event_table="log_event_";
 	private String log_event_count_table="log_event_count_";
