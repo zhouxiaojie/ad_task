@@ -22,8 +22,8 @@ public class LogService implements ILogService{
 	private ILogEventDao logEventDao;	
 	@Resource
 	private ILogService logService;
-	private String startTime="2015-07-07 00:00";
-	private String [] events =new String[]{"reqad_s","reqad_f","show_s","show_f","init_s","init_f"};
+	private String startTime="2015-07-08 00:00";
+	private String [] events =new String[]{"reqad_s","reqad_f","show_s","show_f","init_s","init_f","click"};
 	private int before=1;
 	private String log_event_table="log_event_";
 	private String log_event_count_table="log_event_count_";
@@ -59,23 +59,19 @@ public class LogService implements ILogService{
 					int uvCount = logEventDao.selectCountUvOnMin(log_event_table+date, event,minDate);
 					LogEventCount lec = new LogEventCount(event, count, uvCount, minDate,now,log_event_count_table+DateUtil.DateYYYYFmt(ca.getTime()));
 					content = lec;
-					logEventCountDao.insert(lec);
-					content=null;
-					
+					try {						
+						logEventCountDao.insert(lec);
+					} catch (Exception e) {
+						// TODO: handle exception
+						logEventCountDao.insertJobFailed(job,JsonUtils.OtoJson(content), now);
+					}
 				}
 				
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			try {
-				if(content!=null)
-					logEventCountDao.insertJobFailed(job,JsonUtils.OtoJson(content), now);
-				content=null;
-			} catch (Exception e2) {
-				// TODO: handle exception
-				e2.printStackTrace();
-			}
+			
 			
 		}
 	}
