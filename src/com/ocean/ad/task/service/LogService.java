@@ -22,7 +22,6 @@ public class LogService implements ILogService{
 	private ILogEventDao logEventDao;	
 	@Resource
 	private ILogService logService;
-	private String startTime="2015-07-08 00:00";
 	private String [] events =new String[]{"reqad_s","reqad_f","show_s","show_f","init_s","init_f","click"};
 	private int before=1;
 	private String log_event_table="log_event_";
@@ -37,8 +36,13 @@ public class LogService implements ILogService{
 				String year = DateUtil.DateYYYYFmt(now);
 				String startMin = logEventCountDao.selectMaxTimeByEvent(log_event_count_table+year, event);
 				if(startMin==null){
-					if("2015".equals(year))
-						startMin=startTime;
+					if("2015".equals(year)){
+						Calendar ca = Calendar.getInstance();
+						ca.setTime(now);
+						ca.set(Calendar.HOUR_OF_DAY,0);
+						ca.set(Calendar.MINUTE,0);
+						startMin=DateUtil.DateMinFmt(ca.getTime());						
+					}
 					else{
 						Integer yearPre = Integer.parseInt(year)-1;
 						startMin = logEventCountDao.selectMaxTimeByEvent(log_event_count_table+yearPre, event);
